@@ -4,26 +4,24 @@
 #include <sys/types.h>
 
 int main(){
-    int parent_id = 0;
-    int firstChild_id = 0, secondChild_id = 0;
+    int parent_id;
+    int firstChild_id, secondChild_id;
 
-    int forkFistChild = fork();
     parent_id = getpid();
 
-    if (forkFistChild == 0) { //Frist Child
+    if ((firstChild_id = fork()) == 0) { //First Child
         firstChild_id = getpid();
-        parent_id = getppid();
+        
         while (1) {                        
             printf("First Child ID %d; its parent: %d\n", firstChild_id, parent_id);
             sleep(1);
         }
     } else { //Parent Process
-        int forkSecondChild = fork();
-        if(forkSecondChild == 0){ //Second Child
+        if((secondChild_id = fork())== 0){ //Second Child
             secondChild_id = getpid();
             for (int i = 0; i < 6; i++) {
                 sleep(1);
-                printf("Second Child ID %d; its parent: %d>>i=%d\n", secondChild_id, getppid(), i);
+                printf("Second Child ID %d; its parent: %d\n", secondChild_id, getppid());
             }
             printf("Kill PID: %d\n", firstChild_id);
             kill(firstChild_id, 15);
